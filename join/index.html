@@ -24,7 +24,7 @@
     <p dir="ltr">You’ve been invited to a shared shopping list. Install the app, and the link will be waiting in it.</p>
     <a class="button" id="install" href="https://apps.apple.com/app/id6816899167?pt=129525522&ct=join&mt=8">התקנה מה-App Store · Install</a>
     <a class="button secondary" id="open" href="supermarketlist://join">כבר מותקנת? פתחו באפליקציה · Open in the app</a>
-    <p class="muted">אחרי ההתקנה לחצו "הדבק" במסך הפתיחה. · After installing, tap "Paste" on the welcome screen.</p>
+    <p class="muted">אחרי ההתקנה פתחו את האפליקציה ולחצו "הדבק", או לחצו שוב על הקישור שקיבלתם. · After installing, open the app and tap "Paste", or tap the link you got again.</p>
   </div>
   <div id="android" hidden>
     <p>הוזמנתם לרשימת קניות משותפת. האפליקציה זמינה כרגע לאייפון בלבד, אז אי אפשר להצטרף מאנדרואיד. אפשר לבקש ממי ששלח את הקישור לשלוח לכם את הרשימה כטקסט.</p>
@@ -34,15 +34,22 @@
 <script>
   var token = new URLSearchParams(location.search).get('t') || ''
   document.getElementById('open').href = 'supermarketlist://join?t=' + encodeURIComponent(token)
+  var store = 'https://apps.apple.com/app/id6816899167?pt=129525522&ct=join&mt=8'
   if (/android/i.test(navigator.userAgent)) {
-    document.getElementById('ios').hidden = true
-    document.getElementById('android').hidden = false
+    if (false) {
+      store = 'https://play.google.com/store/apps/details?id=com.galabisira.supermarketlist&referrer=utm_source%3Djoin'
+      document.getElementById('install').href = store
+      document.getElementById('install').textContent = 'התקנה מ-Google Play · Install'
+    } else {
+      document.getElementById('ios').hidden = true
+      document.getElementById('android').hidden = false
+    }
   }
-  // Copy the link before leaving for the App Store; the app pastes it later.
+  // Copy the link before leaving for the store; the app pastes it later.
   document.getElementById('install').addEventListener('click', function (event) {
     if (!token || !navigator.clipboard) return
     event.preventDefault()
-    var go = function () { location.href = 'https://apps.apple.com/app/id6816899167?pt=129525522&ct=join&mt=8' }
+    var go = function () { location.href = store }
     navigator.clipboard.writeText(location.href).then(go, go)
   })
 </script>
